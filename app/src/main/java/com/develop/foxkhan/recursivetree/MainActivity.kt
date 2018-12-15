@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
                 val min = 0
                 val max = 135f
 
-                tree_view.angle = min + max * (progress / 100f)
+                tree_view.angle = min + (max - min) * (progress / 100f)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}

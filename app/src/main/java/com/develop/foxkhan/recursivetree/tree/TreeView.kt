@@ -66,59 +66,31 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
         cX = width / 2f
         cY = height.toFloat()
 
-        val length = width / 5f
+        val length = width / 6f
 
         branch(canvas, length)
     }
 
 
-    private fun branch(canvas: Canvas, len: Float, strokeWidth: Float = 15f) {
+    private fun branch(canvas: Canvas, len: Float) {
 
-        if (len < width / 50f) return
-        branchPaint.strokeWidth = strokeWidth
-
-        val random = Random.nextInt(0, 100)
-        val lengthDividerL = 0.6f + (0.2f * (random / 100f))
-        val strokeWidthDividerL = 0.7f + (0.2f * (random / 100f))
+        if (len < width / 60f) return
 
 
-
-        val randomR = Random.nextInt(0, 100)
-        val lengthDividerR = 0.6f + (0.2f * (randomR / 100f))
-        val strokeWidthDividerR = 0.7f + (0.2f * (random / 100f))
-
-
+        val lengthDivider = 0.8f
 
         canvas.drawLine(cX, cY, cX, cY - len, branchPaint)
         canvas.translate(0f, -len)
 
-        when (Random.nextInt(1, 6)) {
+        canvas.save()
+        canvas.rotate(angle, cX, cY)
+        branch(canvas, len * lengthDivider)
+        canvas.restore()
 
-            1 -> {
-                canvas.save()
-                canvas.rotate(angle + Random.nextInt(-10, 10), cX, cY)
-                branch(canvas, len * lengthDividerR, strokeWidth * strokeWidthDividerR)
-                canvas.restore()
-            }
-
-            2 -> {
-                canvas.save()
-                canvas.rotate(-angle + Random.nextInt(-10, 10), cX, cY)
-                branch(canvas, len * lengthDividerL, strokeWidth * strokeWidthDividerL)
-                canvas.restore()
-            }
-            else -> {
-                canvas.save()
-                canvas.rotate(angle + Random.nextInt(-10, 10), cX, cY)
-                branch(canvas, len * lengthDividerR,strokeWidth * strokeWidthDividerR)
-                canvas.restore()
-
-                canvas.save()
-                canvas.rotate(-angle + Random.nextInt(-10, 10), cX, cY)
-                branch(canvas, len * lengthDividerL, strokeWidth * strokeWidthDividerL)
-                canvas.restore()
-            }
-        }
+        canvas.save()
+        canvas.rotate(-angle - 15, cX, cY)
+        branch(canvas, len * lengthDivider)
+        canvas.restore()
     }
 
 
