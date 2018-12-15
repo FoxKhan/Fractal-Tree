@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import com.develop.foxkhan.recursivetree.R
+import kotlin.random.Random
 
 
 class TreeView
@@ -51,6 +52,8 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
     private var cX: Float = -1f
     private var cY: Float = -1f
 
+    private var strokeWidth = 6
+
     var angle = 45f
         set(value) {
             field = value
@@ -63,28 +66,59 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
         cX = width / 2f
         cY = height.toFloat()
 
-        val length = width / 3f
+        val length = width / 5f
 
         branch(canvas, length)
     }
 
 
-    private fun branch(canvas: Canvas, len: Float) {
+    private fun branch(canvas: Canvas, len: Float, strokeWidth: Float = 15f) {
 
-        if (len < 5) return
+        if (len < width / 50f) return
+        branchPaint.strokeWidth = strokeWidth
+
+        val random = Random.nextInt(0, 100)
+        val lengthDividerL = 0.6f + (0.2f * (random / 100f))
+        val strokeWidthDividerL = 0.7f + (0.2f * (random / 100f))
+
+
+
+        val randomR = Random.nextInt(0, 100)
+        val lengthDividerR = 0.6f + (0.2f * (randomR / 100f))
+        val strokeWidthDividerR = 0.7f + (0.2f * (random / 100f))
+
+
 
         canvas.drawLine(cX, cY, cX, cY - len, branchPaint)
         canvas.translate(0f, -len)
 
-        canvas.save()
-        canvas.rotate(angle, cX, cY)
-        branch(canvas, len * 0.67f)
-        canvas.restore()
+        when (Random.nextInt(1, 6)) {
 
-        canvas.save()
-        canvas.rotate(-angle, cX, cY)
-        branch(canvas, len * 0.67f)
-        canvas.restore()
+            1 -> {
+                canvas.save()
+                canvas.rotate(angle + Random.nextInt(-10, 10), cX, cY)
+                branch(canvas, len * lengthDividerR, strokeWidth * strokeWidthDividerR)
+                canvas.restore()
+            }
+
+            2 -> {
+                canvas.save()
+                canvas.rotate(-angle + Random.nextInt(-10, 10), cX, cY)
+                branch(canvas, len * lengthDividerL, strokeWidth * strokeWidthDividerL)
+                canvas.restore()
+            }
+            else -> {
+                canvas.save()
+                canvas.rotate(angle + Random.nextInt(-10, 10), cX, cY)
+                branch(canvas, len * lengthDividerR,strokeWidth * strokeWidthDividerR)
+                canvas.restore()
+
+                canvas.save()
+                canvas.rotate(-angle + Random.nextInt(-10, 10), cX, cY)
+                branch(canvas, len * lengthDividerL, strokeWidth * strokeWidthDividerL)
+                canvas.restore()
+            }
+        }
     }
 
 
